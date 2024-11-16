@@ -64,6 +64,7 @@ const Home = () => {
       return toastrUtil.show("Description is required", "error");
 
     const params = {
+      ...(id ? { taskId: id } : {}),
       title: taskInfo.title.trim(),
       description: taskInfo.description.trim(),
     };
@@ -111,6 +112,7 @@ const Home = () => {
           userId: loggedInUserId,
         },
       });
+      toastrUtil.show("Task deleted successfully", "success");
       setIsLoading(false);
       getTasks();
     } catch (error) {
