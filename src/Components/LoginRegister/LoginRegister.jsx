@@ -81,6 +81,14 @@ const LoginRegister = () => {
             email: userInfo?.email?.trim(),
             password: userInfo?.password,
           };
+
+      if (!googleCred) {
+        if (!isValidEmail(userInfo?.email?.trim()))
+          return toastrUtil.show("Please enter valid email", "error");
+        if (!userInfo?.password)
+          return toastrUtil.show("Password is required", "error");
+      }
+
       const query = {
         method: "post",
         url: `${process.env.REACT_APP_API_URL}auth/login`,
