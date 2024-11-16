@@ -138,6 +138,7 @@ const Home = () => {
         })
       );
       localStorage.removeItem("token");
+      toastrUtil.show("You have been logged out successfully", "success");
 
       // Redirect to login/signup page
       navigate("/");
