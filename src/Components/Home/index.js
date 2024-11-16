@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,6 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewTask, setViewTask] = useState(null);
 
-  const searchRef = useRef(null);
   const handleSearch = useCallback(
     debounce((e) => {
       const searchTerm = e.target.value;
@@ -109,7 +108,7 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
         data: {
-          userId: loggedInUserId, // Add custom data in the payload
+          userId: loggedInUserId,
         },
       });
       setIsLoading(false);
@@ -204,10 +203,6 @@ const Home = () => {
           </div>
         </nav>
 
-        {/* <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Task Management</h1>
-        <button className="btn btn-success">Add Task</button>
-      </div> */}
         <div className="input-group mb-3">
           <input
             onChange={handleSearch}

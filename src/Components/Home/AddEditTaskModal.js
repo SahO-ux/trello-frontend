@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
 
-// import { smallSelectStyle } from "assets/js/select-style";
-// import { adminEmployeePermissions, userPermissionRadioLabels } from "./constant";
-
 const AddEditTaskModal = ({
   taskInfo,
   setTaskInfo,
