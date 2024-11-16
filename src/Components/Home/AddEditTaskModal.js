@@ -71,7 +71,7 @@ const AddEditTaskModal = ({
           </div>
           {viewTask && (
             <div className="form-group mt-2">
-              <label className="form-label">Created At</label>{" "}
+              <label className="form-label">Created at</label>{" "}
               <span>
                 {moment(viewTask?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
               </span>
