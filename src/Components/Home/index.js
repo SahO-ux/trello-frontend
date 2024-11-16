@@ -44,7 +44,6 @@ const Home = () => {
   const getTasks = async () => {
     try {
       let url = `${process.env.REACT_APP_API_URL}${loggedInUserId}/get-tasks`;
-      console.log(searchTerm);
       url = searchTerm ? url + "?" + objToQueryParams({ searchTerm }) : url;
       const response = await axios.get(url, {
         headers: {
