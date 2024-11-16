@@ -42,7 +42,7 @@ const Home = () => {
 
   const getTasks = async () => {
     try {
-      let url = `https://trello-backend-sooty.vercel.app${loggedInUserId}/get-tasks`;
+      let url = `https://trello-backend-sooty.vercel.app/${loggedInUserId}/get-tasks`;
       url = searchTerm ? url + "?" + objToQueryParams({ searchTerm }) : url;
       const response = await axios.get(url, {
         headers: {
