@@ -42,7 +42,7 @@ const Home = () => {
 
   const getTasks = async () => {
     try {
-      let url = `https://trello-backend-sooty.vercel.app/${loggedInUserId}/get-tasks`;
+      let url = `${process.env.REACT_APP_API_URL}${loggedInUserId}/get-tasks`;
       url = searchTerm ? url + "?" + objToQueryParams({ searchTerm }) : url;
       const response = await axios.get(url, {
         headers: {
@@ -67,7 +67,7 @@ const Home = () => {
       title: taskInfo.title.trim(),
       description: taskInfo.description.trim(),
     };
-    const url = `https://trello-backend-sooty.vercel.app/${loggedInUserId}/${
+    const url = `${process.env.REACT_APP_API_URL}${loggedInUserId}/${
       id ? "update" : "create"
     }-task`;
     const query = {
@@ -101,7 +101,7 @@ const Home = () => {
   const deleteTask = async (taskId) => {
     try {
       if (!taskId) return;
-      const url = `https://trello-backend-sooty.vercel.app/delete-task/${taskId}`;
+      const url = `${process.env.REACT_APP_API_URL}delete-task/${taskId}`;
       setIsLoading(true);
       const response = await axios.delete(url, {
         headers: {
@@ -126,13 +126,9 @@ const Home = () => {
   const handleLogout = async () => {
     try {
       // Call the logout API
-      await axios.post(
-        `https://trello-backend-sooty.vercel.app/auth/logout`,
-        null,
-        {
-          headers: { Authorization: `Bearer ${getStorage("token")}` },
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}auth/logout`, null, {
+        headers: { Authorization: `Bearer ${getStorage("token")}` },
+      });
 
       // Clear storage and state
       dispatch(

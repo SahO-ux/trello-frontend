@@ -52,7 +52,7 @@ const LoginRegister = () => {
       password: password?.trim(),
     };
 
-    const url = `https://trello-backend-sooty.vercel.app/auth/register`.trim();
+    const url = `${process.env.REACT_APP_API_URL}auth/register`;
     const query = {
       method: "post",
       url,
@@ -83,7 +83,7 @@ const LoginRegister = () => {
           };
       const query = {
         method: "post",
-        url: `https://trello-backend-sooty.vercel.app/auth/login`,
+        url: `${process.env.REACT_APP_API_URL}auth/login`,
         data: params,
       };
 
