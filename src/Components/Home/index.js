@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import moment from "moment";
 import { debounce } from "lodash";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -158,7 +159,10 @@ const Home = () => {
             <h5 className="card-title">{task.title}</h5>
             <p className="card-text">{task.description}</p>
             <p className="card-text">
-              <small className="text-muted">Created at: {task.createdAt}</small>
+              <small className="text-muted">
+                Created at:{" "}
+                {moment(viewTask?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
+              </small>
             </p>
             <div className="d-flex gap-2">
               <button
