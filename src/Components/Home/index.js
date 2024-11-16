@@ -57,7 +57,7 @@ const Home = () => {
     }
   };
 
-  const handleAddEditTask = (id = "") => {
+  const handleAddEditTask = async (id = "") => {
     if (!taskInfo?.title?.trim())
       return toastrUtil.show("Title is required", "error");
     if (!taskInfo?.description?.trim())
@@ -79,7 +79,7 @@ const Home = () => {
       },
     };
     setIsLoading(true);
-    axios(query)
+    await axios(query)
       .then((res) => {
         setTaskInfo(initialTaskInfo);
         setIsLoading(false);

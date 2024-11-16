@@ -59,7 +59,7 @@ const LoginRegister = () => {
       data: params,
     };
     setIsLoading(true);
-    axios(query)
+    await axios(query)
       .then((res) => {
         setUserInfo(initialUserInfo);
         setIsLoading(false);
@@ -88,7 +88,7 @@ const LoginRegister = () => {
       };
 
       setIsLoading(true);
-      axios(query)
+      await axios(query)
         .then((res) => {
           toastrUtil.show("You have successfully logged in", "success");
           setIsLoading(false);
