@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -71,12 +73,14 @@ const LoginRegister = () => {
       });
   };
 
-  const login = async () => {
+  const login = async (googleCred) => {
     try {
-      const params = {
-        email: userInfo?.email?.trim(),
-        password: userInfo?.password,
-      };
+      const params = googleCred
+        ? { googleToken: googleCred }
+        : {
+            email: userInfo?.email?.trim(),
+            password: userInfo?.password,
+          };
       const query = {
         method: "post",
         url: `${process.env.REACT_APP_API_URL}auth/login`,
@@ -111,175 +115,186 @@ const LoginRegister = () => {
   };
 
   return (
-    <div>
-      {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div className="container-fluid">
-          <span className="navbar-brand">Task Manager</span>
-          <div className="ml-auto">
-            <button
-              onClick={() => setSignupOrLogin("login")}
-              className={`btn ${
-                signupOrLogin !== "signup" ? "btn-light" : "btn-outline-light"
-              } me-2`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setSignupOrLogin("signup")}
-              className={`btn ${
-                signupOrLogin === "signup" ? "btn-light" : "btn-outline-light"
-              }`}
-            >
-              Signup
-            </button>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_SSO}>
+      <div>
+        {/* Navbar */}
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+          <div className="container-fluid">
+            <span className="navbar-brand">Task Manager</span>
+            <div className="ml-auto">
+              <button
+                onClick={() => setSignupOrLogin("login")}
+                className={`btn ${
+                  signupOrLogin !== "signup" ? "btn-light" : "btn-outline-light"
+                } me-2`}
+              >
+                Login
+              </button>
+              <button
+                onClick={() => setSignupOrLogin("signup")}
+                className={`btn ${
+                  signupOrLogin === "signup" ? "btn-light" : "btn-outline-light"
+                }`}
+              >
+                Signup
+              </button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Signup Form */}
-      <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="card shadow-sm p-4" style={{ width: "400px" }}>
-          <h4 className="card-title text-center mb-4">
-            {signupOrLogin === "signup" ? "Signup" : "Login"}
-          </h4>
-          {signupOrLogin === "signup" && (
-            <>
-              <div className="mb-3">
-                <label htmlFor="firstName" className="form-label">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="firstName"
-                  onChange={(e) =>
-                    setUserInfo((prevVal) => {
-                      return {
-                        ...prevVal,
-                        firstName: e?.target?.value,
-                      };
-                    })
-                  }
-                  placeholder="Enter your first name"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="lastName" className="form-label">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="lastName"
-                  onChange={(e) =>
-                    setUserInfo((prevVal) => {
-                      return {
-                        ...prevVal,
-                        lastName: e?.target?.value,
-                      };
-                    })
-                  }
-                  placeholder="Enter your last name"
-                  required
-                />
-              </div>
-            </>
-          )}
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              onChange={(e) =>
-                setUserInfo((prevVal) => {
-                  return {
-                    ...prevVal,
-                    email: e?.target?.value,
-                  };
-                })
-              }
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              onChange={(e) =>
-                setUserInfo((prevVal) => {
-                  return {
-                    ...prevVal,
-                    password: e?.target?.value,
-                  };
-                })
-              }
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          {signupOrLogin === "signup" && (
+        {/* Signup Form */}
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+          <div className="card shadow-sm p-4" style={{ width: "400px" }}>
+            <h4 className="card-title text-center mb-4">
+              {signupOrLogin === "signup" ? "Signup" : "Login"}
+            </h4>
+            {signupOrLogin === "signup" && (
+              <>
+                <div className="mb-3">
+                  <label htmlFor="firstName" className="form-label">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="firstName"
+                    onChange={(e) =>
+                      setUserInfo((prevVal) => {
+                        return {
+                          ...prevVal,
+                          firstName: e?.target?.value,
+                        };
+                      })
+                    }
+                    placeholder="Enter your first name"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="lastName" className="form-label">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="lastName"
+                    onChange={(e) =>
+                      setUserInfo((prevVal) => {
+                        return {
+                          ...prevVal,
+                          lastName: e?.target?.value,
+                        };
+                      })
+                    }
+                    placeholder="Enter your last name"
+                    required
+                  />
+                </div>
+              </>
+            )}
             <div className="mb-3">
-              <label htmlFor="confirm-password" className="form-label">
-                Confirm Password
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
               <input
-                type="password"
+                type="email"
                 className="form-control"
-                id="confirm-password"
+                id="email"
                 onChange={(e) =>
                   setUserInfo((prevVal) => {
                     return {
                       ...prevVal,
-                      confirmPassword: e?.target?.value,
+                      email: e?.target?.value,
                     };
                   })
                 }
-                placeholder="Confirm your password"
+                placeholder="Enter your email"
                 required
               />
             </div>
-          )}
 
-          <button
-            disabled={isLoading}
-            onClick={() => {
-              if (signupOrLogin === "signup") register();
-              else login();
-            }}
-            className="btn btn-primary w-100"
-          >
-            {signupOrLogin === "signup" ? "Signup" : "Login"}
-          </button>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                onChange={(e) =>
+                  setUserInfo((prevVal) => {
+                    return {
+                      ...prevVal,
+                      password: e?.target?.value,
+                    };
+                  })
+                }
+                placeholder="Enter your password"
+                required
+              />
+            </div>
 
-          <div className="text-center mt-3">
             {signupOrLogin === "signup" && (
-              <p>
-                Already have an account?{" "}
-                <span
-                  className="text-primary"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setSignupOrLogin("login")}
-                >
-                  Login
-                </span>
-              </p>
+              <div className="mb-3">
+                <label htmlFor="confirm-password" className="form-label">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="confirm-password"
+                  onChange={(e) =>
+                    setUserInfo((prevVal) => {
+                      return {
+                        ...prevVal,
+                        confirmPassword: e?.target?.value,
+                      };
+                    })
+                  }
+                  placeholder="Confirm your password"
+                  required
+                />
+              </div>
             )}
+
+            <button
+              disabled={isLoading}
+              onClick={() => {
+                if (signupOrLogin === "signup") register();
+                else login();
+              }}
+              className="btn btn-primary w-100"
+            >
+              {signupOrLogin === "signup" ? "Signup" : "Login"}
+            </button>
+
+            <div className="text-center mt-3">
+              {signupOrLogin === "signup" && (
+                <p>
+                  Already have an account?{" "}
+                  <span
+                    className="text-primary"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSignupOrLogin("login")}
+                  >
+                    Login
+                  </span>
+                </p>
+              )}
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  login(credentialResponse?.credential);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+                size="large"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 
