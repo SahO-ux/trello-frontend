@@ -118,3 +118,80 @@ export const toastrUtil = {
     }
   },
 };
+
+export function displayName(fullName) {
+  if (fullName) {
+    const name = fullName.split(" ");
+    const lname = name[1];
+    const fname = name[0];
+    if (lname) {
+      return (
+        fname.substr(0, 1).toUpperCase() + lname.substr(0, 1).toUpperCase()
+      );
+    } else return fname.substr(0, 2).toUpperCase();
+  }
+  return "";
+}
+
+export const smallSelectStyle = {
+  control: (base, state) => ({
+    ...base,
+    minHeight: 30,
+    borderColor: "#BFCCDA",
+    borderRadius: "3px",
+    boxShadow: "none",
+    transition: "background-color .4s ease-out !important",
+    "&:hover": {
+      borderColor: "#687d96",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      border: "1px solid var(--color-primary-500)",
+      paddingTop: "6.5px",
+      paddingBottom: "6.5px",
+      boxShadow: "none",
+    },
+    "&:active": {
+      border: "1px solid var(--color-primary-500)",
+      boxShadow: "none",
+    },
+  }),
+  menu: (base) => ({
+    ...base,
+    innerHeight: 30,
+    zIndex: 5,
+  }),
+  menuList: (base) => ({
+    ...base,
+  }),
+  menuPortal: (base) => ({
+    ...base,
+    zIndex: 2
+  }),
+  indicatorsContainer: (provided, state) => ({
+    ...provided,
+    height: 30,
+    color: "#394E66",
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    padding: 5,
+    color: "#394E66",
+    svg: {
+      width: 14,
+    },
+  }),
+  indicatorSeparator: (base) => ({
+    ...base,
+    margin: "0",
+    backgroundColor: "#BFCCDA",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    padding: "7.5px 5px",
+    margin: "5px 10px",
+    borderRadius: 5,
+    maxWidth: "100%",
+    width: "auto"
+  }),
+};

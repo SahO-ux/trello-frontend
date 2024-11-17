@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Select from "react-select";
 import moment from "moment";
 import { debounce } from "lodash";
 import axios from "axios";
@@ -7,19 +8,22 @@ import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import {
+  displayName,
   getStorage,
   objToQueryParams,
+  smallSelectStyle,
   toastrUtil,
 } from "../../services/Common.services";
 import AddEditTaskModal from "./AddEditTaskModal";
-import { initialTaskInfo } from "./constant";
+import { initialTaskInfo, taskSortingLabels } from "./constant";
 import { setLogin } from "../../state";
+import Avatar from "../Common/Avatar";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
-  const loggedInUserId = useSelector((state) => state?.user?._id);
+  const token = useSelector((state) => state?.token);
+  const userInfo = useSelector((state) => state?.user);
 
   const [isLoading, setIsLoading] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -43,7 +47,7 @@ const Home = () => {
 
   const getTasks = async () => {
     try {
-      let url = `${process.env.REACT_APP_API_URL}${loggedInUserId}/get-tasks`;
+      let url = `${process.env.REACT_APP_API_URL}${userInfo?._id}/get-tasks`;
       url = searchTerm ? url + "?" + objToQueryParams({ searchTerm }) : url;
       const response = await axios.get(url, {
         headers: {
@@ -68,8 +72,9 @@ const Home = () => {
       ...(id ? { taskId: id } : {}),
       title: taskInfo.title.trim(),
       description: taskInfo.description.trim(),
+      status: taskInfo?.status,
     };
-    const url = `${process.env.REACT_APP_API_URL}${loggedInUserId}/${
+    const url = `${process.env.REACT_APP_API_URL}${userInfo?._id}/${
       id ? "update" : "create"
     }-task`;
     const query = {
@@ -110,7 +115,7 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
         data: {
-          userId: loggedInUserId,
+          userId: userInfo?._id,
         },
       });
       toastrUtil.show("Task deleted successfully", "success");
@@ -196,9 +201,23 @@ const Home = () => {
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
           <div className="container-fluid">
             <span className="navbar-brand">Task Manager</span>
-            <div className="">
+            <div className="d-flex align-items-center">
+              {/* Avatar and Username */}
+              <div className="d-flex align-items-center text-white me-3">
+                <Avatar
+                  className="border border-white"
+                  size={30} // Adjusted for prominence
+                >
+                  {displayName(userInfo && userInfo.firstName)}
+                </Avatar>
+                <div className="ms-2">
+                  <span className="fw-bold">{`${userInfo?.firstName} ${userInfo?.lastName}`}</span>
+                </div>
+              </div>
+
+              {/* Add Task and Logout Buttons */}
               <button
-                className="btn btn-success mr-2"
+                className="btn btn-success me-2"
                 onClick={() => setAddTask(true)}
               >
                 Add Task
@@ -217,19 +236,38 @@ const Home = () => {
             className="form-control"
             placeholder="Search..."
           />
+          <span className="me-2">Sort By:</span>
+          <Select
+            placeholder="Sort Tasks"
+            styles={smallSelectStyle}
+            options={taskSortingLabels}
+            defaultValue={taskSortingLabels[0]}
+            onChange={(opt) => {
+              let sortedTasks = [];
+              if (opt?.value === "newest")
+                sortedTasks = [...allTasks].sort(
+                  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                );
+              else
+                sortedTasks = [...allTasks].sort(
+                  (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+                );
+              setAllTasks(sortedTasks);
+            }}
+          />
         </div>
         <div className="row">
           <div className="col-md-4">
             <h3 className="text-center">TODO</h3>
-            {renderTasks("TODO")}
+            {renderTasks("To do")}
           </div>
           <div className="col-md-4">
             <h3 className="text-center">IN PROGRESS</h3>
-            {renderTasks("IN PROGRESS")}
+            {renderTasks("In progress")}
           </div>
           <div className="col-md-4">
             <h3 className="text-center">DONE</h3>
-            {renderTasks("DONE")}
+            {renderTasks("Done")}
           </div>
         </div>
       </div>

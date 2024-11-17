@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
+import { taskStatusRadioLabels } from "./constant";
 
 const AddEditTaskModal = ({
   taskInfo,
@@ -16,6 +17,7 @@ const AddEditTaskModal = ({
     const taskInfo = {
       title: viewTask?.title || editData?.title,
       description: viewTask?.description || editData?.description,
+      status: viewTask?.status || editData?.status,
     };
     setTaskInfo(taskInfo);
   }, []);
@@ -77,6 +79,33 @@ const AddEditTaskModal = ({
               </span>
             </div>
           )}
+          <div className="form-group mt-2">
+            <label className="form-label font-14">
+              <span className="text-danger">*</span> Task Status
+            </label>
+            <div className="d-flex">
+              {taskStatusRadioLabels.map((val, index) => (
+                <div className="form-check mr-2" key={index}>
+                  <input
+                    disabled={viewTask}
+                    className={`form-check-input`}
+                    type="radio"
+                    id={val}
+                    name={val}
+                    checked={taskInfo?.status === val}
+                    onChange={(e) => {
+                      setTaskInfo((oldVal) => {
+                        return { ...oldVal, status: e?.target?.name };
+                      });
+                    }}
+                  />
+                  <label className="form-check-label" htmlFor={val}>
+                    {val}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <button
