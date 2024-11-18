@@ -159,14 +159,14 @@ const Home = () => {
     return allTasks
       .filter((task) => task.status === status)
       .map((task) => (
-        <div className="card mb-3" key={task.id}>
+        <div className="card mb-3 shadow-sm" key={task.id}>
           <div className="card-body">
             <h5 className="card-title">{task.title}</h5>
             <p className="card-text">{task.description}</p>
             <p className="card-text">
               <small className="text-muted">
                 Created at:{" "}
-                {moment(viewTask?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
+                {moment(task.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
               </small>
             </p>
             <div className="d-flex gap-2">
@@ -197,7 +197,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="container mt-4">
+      <div className="">
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
           <div className="container-fluid">
             <span className="navbar-brand">Task Manager</span>
@@ -229,45 +229,54 @@ const Home = () => {
           </div>
         </nav>
 
-        <div className="input-group mb-3">
-          <input
-            onChange={handleSearch}
-            type="text"
-            className="form-control"
-            placeholder="Search..."
-          />
-          <span className="me-2">Sort By:</span>
-          <Select
-            placeholder="Sort Tasks"
-            styles={smallSelectStyle}
-            options={taskSortingLabels}
-            defaultValue={taskSortingLabels[0]}
-            onChange={(opt) => {
-              let sortedTasks = [];
-              if (opt?.value === "newest")
-                sortedTasks = [...allTasks].sort(
-                  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                );
-              else
-                sortedTasks = [...allTasks].sort(
-                  (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-                );
-              setAllTasks(sortedTasks);
-            }}
-          />
-        </div>
-        <div className="row">
-          <div className="col-md-4">
-            <h3 className="text-center">TODO</h3>
-            {renderTasks("To do")}
+        <div className="container mt-4">
+          {/* Search and Sort Section */}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="input-group me-3">
+              <input
+                onChange={handleSearch}
+                type="text"
+                className="form-control"
+                placeholder="Search..."
+              />
+            </div>
+            <div className="d-flex align-items-center">
+              <span className="me-2 fw-semibold">Sort By:</span>
+              <Select
+                placeholder="Sort Tasks"
+                styles={smallSelectStyle}
+                options={taskSortingLabels}
+                defaultValue={taskSortingLabels[0]}
+                onChange={(opt) => {
+                  let sortedTasks = [];
+                  if (opt?.value === "newest")
+                    sortedTasks = [...allTasks].sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    );
+                  else
+                    sortedTasks = [...allTasks].sort(
+                      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+                    );
+                  setAllTasks(sortedTasks);
+                }}
+              />
+            </div>
           </div>
-          <div className="col-md-4">
-            <h3 className="text-center">IN PROGRESS</h3>
-            {renderTasks("In progress")}
-          </div>
-          <div className="col-md-4">
-            <h3 className="text-center">DONE</h3>
-            {renderTasks("Done")}
+
+          {/* Cards Section */}
+          <div className="row mt-4">
+            <div className="col-md-4">
+              <h3 className="text-center">TODO</h3>
+              <div className="px-3">{renderTasks("To do")}</div>
+            </div>
+            <div className="col-md-4">
+              <h3 className="text-center">IN PROGRESS</h3>
+              <div className="px-3">{renderTasks("In progress")}</div>
+            </div>
+            <div className="col-md-4">
+              <h3 className="text-center">DONE</h3>
+              <div className="px-3">{renderTasks("Done")}</div>
+            </div>
           </div>
         </div>
       </div>
