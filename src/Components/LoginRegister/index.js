@@ -35,7 +35,7 @@ const LoginRegister = () => {
       return toastrUtil.show("First Name is required", "error");
     if (!lastName?.trim())
       return toastrUtil.show("Last Name is required", "error");
-    if (!isValidEmail(email?.trim()))
+    if (!isValidEmail(email?.trim()?.toLowerCase()))
       return toastrUtil.show("Please enter valid email", "error");
     if (!passwordCriteria.PASSWORD_REGEX.test(password))
       return toastrUtil.show(passwordCriteria.REGEX_MSG, "error");
